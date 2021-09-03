@@ -6,3 +6,4 @@ RF+RIDE+Selenium+Python
 2. pip install robotframework-ride
 3. pip install robotframework-seleniumlibrary
 4. pip install selenium
+5. add "CustomLibrary" to #Python path#\Python37\Lib\site-packages
