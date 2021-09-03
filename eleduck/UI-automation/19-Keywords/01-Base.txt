@@ -1,0 +1,71 @@
+*** Settings ***
+Library           SeleniumLibrary
+Library           CustomLibrary
+Library           Collections
+Library           String
+Resource          ../99-Parameters/Parameters.txt
+Resource          ../19-Keywords/01-Base.txt
+Resource          ../19-Keywords/02-CommonOperation.txt
+Resource          ../19-Keywords/09-Assertion.txt
+
+*** Keywords ***
+C_Click
+    [Arguments]    ${xpath}
+    Set Selenium Speed    0
+    Wait Until Element Is Visible    ${xpath}    timeout=30
+    Scroll Element Into View    ${xpath}
+    Click Element    ${xpath}
+    Set Selenium Speed    ${waittime}
+
+C_Input
+    [Arguments]    ${xpath}    ${value}
+    Set Selenium Speed    0
+    Wait Until Element Is Visible    ${xpath}    timeout=30
+    Scroll Element Into View    ${xpath}
+    Input Text    ${xpath}    ${value}
+    Set Selenium Speed    ${waittime}
+
+Clean Input
+    [Arguments]    ${xpath}
+    Set Selenium Speed    0
+    Wait Until Element Is Visible    ${xpath}    timeout=30
+    Scroll Element Into View    ${xpath}
+    Clear Element Text    ${xpath}
+    Set Selenium Speed    ${waittime}
+
+Get Element Attribute Until 30S
+    [Arguments]    ${xpath}    ${attribute}
+    Set Selenium Speed    0
+    Wait Until Element Is Visible    ${xpath}    timeout=30
+    ${result}    Get Element Attribute    ${xpath}    ${attribute}
+    Set Selenium Speed    ${waittime}
+
+Get Text Until 30S
+    [Arguments]    ${xpath}
+    Set Selenium Speed    0
+    Wait Until Element Is Visible    ${xpath}    timeout=30
+    ${Result}    Get Text    ${xpath}
+    Set Selenium Speed    ${waittime}
+    [Return]    ${Result}
+
+Open Chrome
+    [Arguments]    ${new_host}=
+    Run Keyword If    '${new_host}' == ''    Open Browser    ${host}    Chrome
+    Run Keyword If    '${new_host}' != ''    Open Browser    ${new_host}    Chrome
+    Maximize Browser Window
+    Set Selenium Speed    ${waittime}
+
+Close Chrome
+    Close Browser
+    Kill_Chromedriver
+
+Remove From List by value
+    [Arguments]    ${vaule}    ${list}
+    [Documentation]    Just delete first matching
+    Set Selenium Speed    0
+    ${length}    Get Length    ${list}
+    FOR    ${i}    IN RANGE    ${length}
+        Exit For Loop If    '${list}[${i}]' == '${vaule}'
+    END
+    Remove From List    ${list}    ${i}
+    [Return]    @{list}

@@ -1,0 +1,28 @@
+*** Settings ***
+Library           SeleniumLibrary
+Library           CustomLibrary
+Library           Collections
+Library           String
+Resource          ../99-Parameters/Parameters.txt
+Resource          ../19-Keywords/01-Base.txt
+Resource          ../19-Keywords/02-CommonOperation.txt
+Resource          ../19-Keywords/09-Assertion.txt
+
+*** Keywords ***
+OpenHomepage
+    Open Browser    ${host}    Chrome
+    Maximize Browser Window
+    Set Selenium Speed    ${waittime}
+
+The page is loaded
+    Sleep    1
+    Set Selenium Speed    0
+    Wait Until Element Is Not Visible    //div[text()='加载中…']    timeout=30
+
+Open Post By Author
+    [Arguments]    ${Author}    ${SerialNumber}=null
+    [Documentation]    If ${SerialNumber}=null, Click first element
+    The page is loaded
+    ${SerialNumber}    Run Keyword If    '${SerialNumber}' == 'null'    Set Variable    0
+    ${Result}    Get WebElements    //div[@class='meta-info']/span[2]//span[text()='${Author}']/ancestor::div[@class='post-item']//h2/a
+    C_Click    ${Result}[${SerialNumber}]
